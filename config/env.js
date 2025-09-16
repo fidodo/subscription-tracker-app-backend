@@ -4,6 +4,7 @@ config({ path: `.env.${process.env.NODE_ENV || "development"}.local` });
 
 export const {
   PORT,
+  VITE_PORT,
   NODE_ENV,
   DB_URI,
   JWT_SECRET_KEY,
