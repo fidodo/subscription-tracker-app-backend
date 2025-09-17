@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import TokenBlacklist from "../models/tokenBlacklist.model.js";
 
 export const signUp = async (req, res, next) => {
   const session = await mongoose.startSession();
@@ -92,4 +93,21 @@ export const signIn = async (req, res, next) => {
   }
 };
 
-export const signOut = async (req, res, next) => {};
+export const signOut = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (token) {
+      const decoded = jwt.decode(token);
+      await TokenBlacklist.create({
+        token,
+        expiresAt: new Date(decoded.exp * 1000),
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User signed out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
