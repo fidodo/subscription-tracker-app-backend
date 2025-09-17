@@ -5,4 +5,6 @@ const tokenBlacklistSchema = new mongoose.Schema({
   expiresAt: { type: Date, required: true },
 });
 
-export default mongoose.model("TokenBlacklist", tokenBlacklistSchema);
+const TokenBlacklist = mongoose.model("TokenBlacklist", tokenBlacklistSchema);
+
+export default TokenBlacklist;
